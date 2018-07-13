@@ -31,13 +31,13 @@ check process apache2 with pidfile /var/run/apache2/apache2.pid
  After this you will start the apache service
  sudo /etc/init.d/apache2 start 
 
- and then you can check apache.pid file exist at that location
+ Now you can check apache.pid file exist at that location
  cat var/run/apache2/apache2.pid
 
- then for checking syntax of configuration file i.e monitrc
+ For checking syntax of configuration file i.e monitrc
  sudo monit -t
 
- and then Enable the services 
+ Then Enable the services 
  sudo vi /etc/default/monit
 
  change the following line 
@@ -48,14 +48,6 @@ check process apache2 with pidfile /var/run/apache2/apache2.pid
 
  And Now you can open a browser on your local machine and type this public IP of instance and port.
  publicIP:2812
-
- This screen comes up 
-
- Enter your username and password that you have set in config file 
- username admin
- password monit
-
- And then you will login in your monit. you will see all your process running and click on a process and you will able to check the status of the process.
-
+ Enter username and password and you will login and check the status of services. 
 
 
