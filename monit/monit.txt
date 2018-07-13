@@ -1,0 +1,61 @@
+
+Now we consider a usecase of apache web server that we are deploying on a machine.
+The first thing you have to do is to install apache by typing this command.
+sudo apt install apache2
+ and then install monit by typing this command.
+ sudo apt install monit
+ After installation you fill find a file with this name monitrc configuration file
+ open this file 
+ sudo vi /etc/monit/monitrc
+ Then configure your setting according to apache web server.
+comment out the following lines. And replace the localhost by your private IP in use address line 
+
+# check services every 2 minutes
+set daemon 120
+
+# logging 
+set logfile /var/log/monit.log
+
+# web interface
+set httpd port 2812 and
+    use address localhost # only accept connection from localhost
+    allow localhost       # allow localhost to connect to the server    
+    allow admin:monit     # require user ‘admin’ with password ‘monit’
+    allow 0.0.0.0/0
+
+# monitor apache
+check process apache2 with pidfile /var/run/apache2/apache2.pid
+    start program = "/etc/init.d/apache2 start"
+    if totalmem > 25.0 MB for 2 cycles then alert
+
+ After this you will start the apache service
+ sudo /etc/init.d/apache2 start 
+
+ and then you can check apache.pid file exist at that location
+ cat var/run/apache2/apache2.pid
+
+ then for checking syntax of configuration file i.e monitrc
+ sudo monit -t
+
+ and then Enable the services 
+ sudo vi /etc/default/monit
+
+ change the following line 
+ startup=1
+
+ and the start the monit 
+ sudo /etc/init.d/monit start
+
+ And Now you can open a browser on your local machine and type this public IP of instance and port.
+ publicIP:2812
+
+ This screen comes up 
+
+ Enter your username and password that you have set in config file 
+ username admin
+ password monit
+
+ And then you will login in your monit. you will see all your process running and click on a process and you will able to check the status of the process.
+
+
+
