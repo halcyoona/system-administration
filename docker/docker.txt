@@ -1,0 +1,102 @@
+Introduction
+
+Docker is a tool which provide easiest way to create,deploy, and run application by using containers.Containers allow a developer to upgrade an application with all of the parts need such as libraries and other dependencies  and output as one package.Docker benefits for both developer and system administrator.For developer, they have to focus only on writing the code without worrying  about the system. 
+Docker gives flexibility and potentially reduces the number of systems needed because of its small footprint and lower overhead.
+
+Container and Virtual Machine
+
+Container is so light weighted as compare to Virtual Machine's.Virtual machine is complete operating system they have its own memory storage, API and libraries and everything. Container is bit like virtual machine but rather then creating an whole virtual operating system, docker allow to use the same linux kernel as the system that they're running on and only requires applications be shipped with things not already running on the host machine. This gives a significant performance boost and reduces the size of the application. 
+
+Image and container
+
+Using the same concept of object oriented programming, the difference between docker image and container is the same as the difference between the class and object. object is the runtime instance of that class. Image is a template and Container is also the some type of instance of that image.  
+
+
+Installation
+
+first thing you have to do is to remove the old version of docker by typing simple this command:
+sudo apt-get remove docker docker-engine docker.io
+
+
+Update and install packages to allow apt to use a repository over HTTPS:
+sudo apt update
+sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    software-properties-common
+
+Add official docker GPG key:
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+Add the repository and update:
+sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+
+
+Install the latest version of Docker CE.
+sudo apt-get install docker-ce
+
+Check the version of the Docker.
+docker --version
+Docker version 18.06.0-ce, build 0ffa825
+
+
+Hello world
+To check docker is installed correctly  first thing you have to do is to run hello-world.hello-world is a image which is already downloaded with docker so when you run hello-world it does not show any error. If hello-world image is not present in your system docker automatically search in docker's images repository i.e Docker Hub for hello-world image. And obviously you can make your own images and push in a docker's images repository.
+sudo docker run hello-world
+
+Hello World
+sudo docker run hello-world
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+    (amd64)
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker ID:
+ https://hub.docker.com/
+
+For more examples and ideas, visit:
+ https://docs.docker.com/engine/userguide/
+
+Useful Commands
+
+Check the docker version.
+sudo docker --version
+Docker version 18.06.0-ce, build 0ffa825
+
+You can check current status of images i.e how many images are there?, containers and all information about docker typing this command:
+sudo docker info
+
+If you don't want to write 'sudo' in every command you have to add your user to the docker group by typing this command:
+sudo usermod -aG docker $USER 
+
+To list the images that was downloaded to your machine
+docker image ls 
+
+
+To list the containers that was running at that time:
+docker container ls
+
+if you want all containers, type this:
+docker container ls --all
+
+if you want only ID of container, type this command:
+docker container ls -aq
+
+
+for more commands:
+docker container --help
