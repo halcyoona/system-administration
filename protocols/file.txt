@@ -1,0 +1,47 @@
+Introduction of Protocol
+The word Protocol comes from the Greek "protocollon", meaning a leaf of paper glued to a manuscript volume that describes the contents.In information technology, a protocol is the special set of rules that end points in a telecommunication connection use when they communicate. Protocols specify interactions between the communicating entities. If you open up your browser and want to visit some site and type URL of your required site you can see your browser only uses one protocol i.e HTTP.There are many other protocols that make up the internet.Different Protocols used for different purposes.
+
+
+Types of Protocols
+There are two models i.e OSI model and TCP/IP model, these models are divided into different layers and protocols are also divided layer to layer depending upon the working and purpose of protocols accordingly to layer.
+
+
+OSI
+OSI stands for Open System Interconnection.OSI model is a standard of the International Organization for Standardization (ISO). It is a general-purpose paradigm for discussing or describing how computers communicate with one another over a network. Its seven-layered approach to data transmission divides the many operations up into specific related groups of actions at each layer.
+
+Transmitting machine gives the data to be transmitted to the application layer where it is processed and passed from layer to layer down the stack with each layer perform its designated functions.The data is then passed over the physical layer of the network untill destination computer receives it.At this point data is passed up through the layer again, each layer performing its designated function 
+untill data is used by the receiving machine.
+
+During Transmission, Process of encapsulaion is performed i.e each layer adds a header to the data that directs and identifies the packet.The header and the data together form the packet for the next layer and the next layer adds its own header  and so on. The combined encapsulated packed is then transmitted and received. The receiving machine reverse the process i.e de-encapsulation data at each layer with header information directing the operations.Then, the application finally uses the data.
+
+
+
+TCP/IP Model
+TCP/IP was developed during the 1960s as part  of Defense’s Advanced Research Projects Agency (DARPA) effort to build a nationwide packet data network. It was first used in UNIX-based computers in universities and government installations. Today, it is the main protocol used in all Internet operations.
+
+TCP/IP model uses the client/server model of communication in which a user or machine (a client) is provided a service (like sending a webpage) by another computer (a server) in the network.TCP/IP model  working in the same fasion as OSI layer each layer perform their own designated function and adds its own header.The transport layer itself, however, is stateful. It transmits a single message, and its connection remains in place until all the packets in a message have been received and reassembled at the destination.
+At the receiving end of the link, TCP reassembles the packets in the correct order and routes them up the stack to the application. TCP can retransmit a packet if an error occurs. In any case, TCP’s main job is just to pack and unpack the data and provide some assurance of the reliable transmission of error-free data. The IP layer actually transmits the TCP packet.
+
+
+Transport layer Protocol
+
+Now we are considering only transport layer protocols i.e TCP and UDP. 
+TCP (Transmission Control Protocol) and UDP(User Datagram Protocol) both are used for sending bits of data, known as packets, over the internet. They both build on the top of the IP(Internet protocol).in other words, you can say that whether you are sending packets via TCP or UDP,  that packet is  sent to an IP address. These packets are treated similarly, as  they are forwarded from your computer to intermediary routers and on to the destination.
+
+
+TCP 
+TCP is stand for Transmission Control Protocol.It is the most commonly used protocol on the internet.
+
+Working
+If you open up your browser and want to visit some web page and type URL of your required web page, your machine sends TCP packets to the required web server's address. And asking the web server to send the required web page to you. The web server responded you back by sending the TCP packets and your broswer collect packets and form a web page and display it to you.When you click the link on web page or comment or anything else your web broswer again  send the TCP packets  to the web server and server send back the TCP packets back to your web broswer. TCP is not just the one way communication,the remote system sends packets back to acknowledge packets are received.
+TCP guarantees that packets are received by client by nhumbering them. Client sends packets back to the sender saying that it received the messages.If the sender does not get the correct answer, it will resend it again and ensure that client will received them.Packets are also checked for errors. TCP is all about this reliability,packets sent with TCP are tracked so no data is lost or corrupted in transit. That is why when you downloads file via TCP it does not become corrupt even if there is a network problem.
+TCP is used when data is desirable and you have to receive all packets.You can not miss a single packet.
+
+
+
+UDP
+UDP is stand for User Datagram Protocol, A datagram is the same thing as a packet of information.
+
+working
+When you are using UDP, packets are just sent to the client. The sender is not wait to ensure that the packets are received by client or not. sender will continue sending the next packets. If you are the client and you miss one UDP packet, It will gone. You can not ask sender to send it again.There is no guarantee you are getting all the packets and there is no way to ask for packets.
+UDP is used when speed is desirable and error connection is not necessary.For example, UDP is frequently used for live broadcasts and online games.    
