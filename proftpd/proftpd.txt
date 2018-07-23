@@ -1,0 +1,109 @@
+Introduction
+ Basically, ProFTPD is method to transfer files online.If you open up your browser and want to visit some site and type URL of your required site you can see your browser only uses one protocol i.e HTTP.There are many other protocols that make up the internet.Different Protocols used for different purposes.
+ TCP (Transmission Control Protocol) and UDP(User Datagram Protocol) both are used for sending bits of data, known as packets, over the internet. 
+
+ProFTPD is a popular FTP server. FTP(File Transefer Protocol) is a method to upload files to a server.
+FTP is a application layer protocol.It’s also occasionally used as a way to share files. One person may upload a file to an FTP server, then share a link to it with another person.FTP server offers access to a directory, with sub-directories. Users connect to these servers with an FTP client, a piece of software that lets you download files from the server, as well as upload files to it.
+Well, it essentially looks like the other files on your computer. There’s a hierarchical folder structure, which you can explore in a similar fashion to Windows Explorer or Finder.
+
+Installation
+
+First thing you open a terminal and ssh to your EC2 instance and update it:
+sudo apt update
+
+TO install Proftpd type this command:
+sudo apt -y install proftpd 
+
+When you enter this command this window will come up on your screen:
+
+There were two options i.e Standalone or inetd.
+Inetd: This means that there will be a separete process for every user. Whenever user come, a new process started.Inetd is usefull when you have less number of users.If you have two thousand user per hour then inetd is not a good option.
+
+Standalone:This means that there will be only one process that is  running all the time whenever users come this will create a new thread for a user.Standalone is useful when you have large number of users.
+
+You can check the version of Proftpd:
+proftpd --version
+
+Configuration
+Open the configuration in etc:
+sudo vi /etc/proftpd/proftpd.conf
+
+Change the ServerName to your host name:
+ServerName               "example.com"
+
+Uncomment the following line that sets the DefaultRoot.By doing this you will limit the users to their home directories.
+# Use this to jail all users in their homes
+ DefaultRoot 			  ~
+
+uncomment the PassivePort.
+# In some cases you have to specify passive ports range to by-pass
+# firewall limitations. Ephemeral ports can be used for that, but
+# feel free to use a more narrow range.
+PassivePorts                  49152 65534
+
+Uncomment the MasqueradeAddress set to EC2 Public IP.
+# If your host was NATted, this option is useful in order to
+# allow passive tranfers to work. You have to use your public
+# address and opening the passive ports used on your firewall as well.
+MasqueradeAddress               EC2PublicIP
+
+
+
+That's all with the configuration file. Now save the setting and restart the service by typing this command:
+sudo service proftpd restart 
+
+Now check which ports are listening by typing this command:
+netstat -ntulp
+
+Ports
+If you are doing this on your local machine there will be no port issues you will easly add user and direct access it from your browser and if you are working with EC2 there will be a port issue and there is a solution.open the port21 and port 49152-65534 in EC2 instance in security group.
+
+
+Add user
+To access from another machine firt you have to add user.To add user type this command:
+sudo useradd -m -c "HelloWorld From test" test -s /bin/bash
+This will create user home directory and create a shell for the user.
+And give a password to your user:
+sudo passwd test
+Enter new UNIX password: 
+Retype new UNIX password: 
+passwd: password updated successfully
+
+
+Now come to your local machine and  If you want to resolve IP on some name then edit hosts file else go on with the IP.
+sudo vi /etc/hosts
+
+And add public IP and resolve this IP on your desirable name.
+12.122.23.12           test.com
+
+Now open up your broswer and type your FTP server IP:
+ftp://ServerIP
+And following screen will be shown:
+Enter user name and password and you will be logged in to your FTP server.This type of screen will be shown:
+
+Now you can download file.
+
+
+If you want to access from terminal,Type this:
+sudo ftp ServerIP
+
+Enter user name and password and you will be logged in:
+
+commands:
+
+To show the list of directories:
+ls
+To download file a single file:
+get path/file.txt
+To download multiple files:
+mget *.txt
+To set the path in your local machine where your files are downloaded:
+lcd home/user/yourdirectory
+To upload a single file use:
+put path/file.txt
+To upload multiple files:
+mput path/*.txt
+To quit:
+bye
+or
+exit
