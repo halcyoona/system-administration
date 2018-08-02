@@ -1,0 +1,159 @@
+Introduction
+
+We will take a look at using Python Scripts to interact with infrastructure provided by Amazon Web Services(AWS).
+In this tutorial, We are considering only Python scripting for EC2.
+
+First thing, You have to check python is installed in your machine by typing simple command:
+which python
+That will show you the path of python executable. If python is not installed in your machine first download it from this site: https://www.python.org/downloads/ 
+After this check the version of python by typing:
+python -V
+We are using python 2.7.12 and you can use python 2.6 or higher.
+
+Next thing you have to check pip is intall in your machine by typing command:
+which pip
+That will show you the path of pip executable.If pip is not installed in your machine first download it from this site:
+https://pip.pypa.io/en/stable/installing/
+
+After this install th bOTO3 and AWS CLI tool:
+sudo pip install awscli boto3 -U --ignore-installed six
+
+
+
+Go login to your AWS account and select IAM 
+
+
+Open terminal and type:
+aws configure
+
+And then enter your information given in credentials.csv file.
+
+AWS Access Key ID [****************TMVQ]: AKIAI2PPJ7DR4GG36YGA
+AWS Secret Access Key [****************EAlg]: G6VgHzo88rudEsU/0k7tExF36vY6nNWnN3SBYkPt
+Default region name [us-east-1]: us-east-1
+Default output format [text]: text
+Now you can create your buckets by python scripts.
+
+Python Scripts
+listing Bucket
+Move to our first script i.e listing the buckets in S3.Import the boto3 library and create a handle of S3 resource.And printing all buckets and printing all the data present in buckets.You can change the printing format as your desire.
+
+#!/usr/bin/env python
+import sys
+import boto3
+s3 = boto3.resource('s3')
+for bucket in s3.buckets.all():
+    print bucket.name
+    print "---"
+    for item in bucket.objects.all():
+        print "\t%s" % item.key
+
+Create a file list_buckets.py and write this code in list_buckets.py  and make it executable.
+
+chmod +x list_buckets.py
+./list_buckets.py
+
+This will show you all the buckets and data present in buckets.
+
+Create Bucket
+This script is to create bucket.Every bucket should have unique name.Import sys and boto3 library and create a handle of S3 resource.This script takes one command line argument as input i.e your desirable bucket name.Create a bucket with the name you give as input.  
+
+#!/usr/bin/env python
+import sys
+import boto3
+s3 = boto3.resource("s3")
+for bucket_name in sys.argv[1:]:
+    try:
+        response = s3.create_bucket(Bucket=bucket_name)
+        print response
+    except Exception as error:
+        print error
+
+Put this code in create_bucket.py file and change the mode.
+
+chmod +x create_bucket.py
+./create_bucket.py halcyoona
+
+Output will be this.
+
+s3.Bucket(name='halcyoona')
+
+
+Upload a file in Bucket
+This scirpt is to upload file into your bucket.Import sys and boto3 library and make a handle of S3  resource.This script take two command line arguments as input i.e first is bucket name and second is filename you want to upload.
+
+#!/usr/bin/env python
+import sys
+import boto3
+s3 = boto3.resource("s3")
+bucket_name = sys.argv[1]
+object_name = sys.argv[2]
+try:
+    response = s3.Object(bucket_name, object_name).put(Body=open(object_name, 'rb'))
+    print response
+except Exception as error:
+    print error
+
+Put this code in put_bucket.py and make it executable.
+
+chmod +x put_bucket.py
+./put_bucket.py halcyoona file23.txt
+
+This will be the respone.
+
+{u'ETag': '"d41d8cd98f00b204e9800998ecf8427e"', 'ResponseMetadata': {'HTTPStatusCode': 200, 'RetryAttempts': 0, 'HostId': '31e/fqpnEKPuq5eYsFaTJL1hDmCwLXZh/HF9D6Q+xSkfFvbPuEkq9hHXSf0sm7kSkrxfSR9BXPc=', 'RequestId': '06459EA47A960133', 'HTTPHeaders': {'content-length': '0', 'x-amz-id-2': '31e/fqpnEKPuq5eYsFaTJL1hDmCwLXZh/HF9D6Q+xSkfFvbPuEkq9hHXSf0sm7kSkrxfSR9BXPc=', 'server': 'AmazonS3', 'x-amz-request-id': '06459EA47A960133', 'etag': '"d41d8cd98f00b204e9800998ecf8427e"', 'date': 'Thu, 02 Aug 2018 05:35:48 GMT'}}}
+You can check it by listing the bucket and its content.
+
+Delete file from bucket
+This script is to delete all the content from selected bucket.First,import sys and import boto3 and create a handle of S3 resource.This script takes one command line argument i.e name of bucket from which you wnat to delete the content.
+
+#!/usr/bin/env python
+import sys
+import boto3
+s3 = boto3.resource('s3')
+for bucket_name in sys.argv[1:]:
+    bucket = s3.Bucket(bucket_name)
+    for key in bucket.objects.all():
+        try:
+            response = key.delete()
+            print response
+        except Exception as error:
+            print error
+
+Put this script in delete_content.py file and make it executable.
+
+chmod +x delete_content.py 
+./delete_content.py halcyoona
+
+This will be the respones.
+
+{'ResponseMetadata': {'HTTPStatusCode': 204, 'RetryAttempts': 0, 'HostId': 'xIOzYhG6bpxVS6hzr/fmYZUCIBQr5SO04MS+Wm+7r3JaqZJs+svM/8r6EBXhmsBe4vJ+c5YIj7Y=', 'RequestId': 'CF53248C450BB9EB', 'HTTPHeaders': {'x-amz-id-2': 'xIOzYhG6bpxVS6hzr/fmYZUCIBQr5SO04MS+Wm+7r3JaqZJs+svM/8r6EBXhmsBe4vJ+c5YIj7Y=', 'date': 'Thu, 02 Aug 2018 05:50:04 GMT', 'x-amz-request-id': 'CF53248C450BB9EB', 'server': 'AmazonS3'}}}
+
+
+Delete bucket
+This script is to delete a bucket.first,Import sys and boto3 library and create a handle of S3 resource. This script takes one command line argument i.e bucket name that you want to delete.
+
+#!/usr/bin/env python
+import sys
+import boto3
+s3 = boto3.resource('s3')
+for bucket_name in sys.argv[1:]:
+    bucket = s3.Bucket(bucket_name)
+try:
+    response = bucket.delete()
+    print response
+except Exception as error:
+    print error
+
+
+Put this code in delete_bucket.py file and make it executable.
+
+chmod +x delete_bucket.py
+./delete_bucket.py halcyoona
+
+
+This will be the response.
+
+{'ResponseMetadata': {'HTTPStatusCode': 204, 'RetryAttempts': 0, 'HostId': '2K+sWiX7x0nKVnqCLqcfIWd6DBebLWK00VEHfVxT7TpRe+omss1qIJuRQY2TIJe2RTslhzGgb68=', 'RequestId': '9F9F7AAFDDDBB2E3', 'HTTPHeaders': {'x-amz-id-2': '2K+sWiX7x0nKVnqCLqcfIWd6DBebLWK00VEHfVxT7TpRe+omss1qIJuRQY2TIJe2RTslhzGgb68=', 'date': 'Thu, 02 Aug 2018 05:55:53 GMT', 'x-amz-request-id': '9F9F7AAFDDDBB2E3', 'server': 'AmazonS3'}}}
+
+That's it.
