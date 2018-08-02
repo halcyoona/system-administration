@@ -1,0 +1,97 @@
+Introduction
+
+We will take a look at using Python Scripts to interact with infrastructure provided by Amazon Web Services(AWS).
+In this tutorial, We are considering only Python scripting for EC2.
+
+First thing, You have to check python is installed in your machine by typing simple command:
+which python
+That will show you the path of python executable. If python is not installed in your machine first download it from this site: https://www.python.org/downloads/ 
+After this check the version of python by typing:
+python -V
+We are using python 2.7.12 and you can use python 2.6 or higher.
+
+Next thing you have to check pip is intall in your machine by typing command:
+which pip
+That will show you the path of pip executable.If pip is not installed in your machine first download it from this site:
+https://pip.pypa.io/en/stable/installing/
+
+After this install th bOTO3 and AWS CLI tool:
+sudo pip install awscli boto3 -U --ignore-installed six
+
+
+
+Go login to your AWS account and select IAM 
+
+
+
+Open terminal and type:
+aws configure
+
+
+print ID and state of instances.
+
+#!/usr/bin/env python
+import boto3
+ec2 = boto3.resource('ec2')
+for instance in ec2.instances.all():
+    print instance.id, instance.state
+
+Put this code in create_instance.py file.And make it executable.
+
+$ chmod +x list_instances.py
+$ ./list_instances.py
+That will show you all you instances and their state.
+
+Create instance script
+First thing you have to know the image ID that you want to create.
+
+Screenshot from 2018-07-16 14-46-07
+
+Image ID is highlighted in above window you can see.
+
+Now move to our second script i.e create instance of EC2. Make a handle of EC2 resource and call a create_instances() function and pass  a image ID, max and min counts, and the instance type. Printing the instance that is created.
+
+#!/usr/bin/env python
+import boto3
+ec2 = boto3.resource('ec2')
+instance = ec2.create_instances(
+    ImageId='ami-1e299d7e',
+    MinCount=1,
+    MaxCount=1,
+    InstanceType='t2.micro')
+print instance[0].id
+
+Put this code in create_instance.py file. Make it executable.
+
+$ chmod +x create_instance.py
+$ ./create_instance.py
+
+
+ Terminate instance script
+Now move to script to delete the instance.Create a handle of EC2 resource and call the instance() function and send instance_id as parameter and then call the terminate() function to terminate and printing that response.
+
+#!/usr/bin/env python
+import sys
+import boto3
+ec2 = boto3.resource('ec2')
+for instance_id in sys.argv[1:]:
+    instance = ec2.Instance(instance_id)
+    response = instance.terminate()
+    print response
+
+
+put this script in a terminate_instance.py file and make it executable.
+
+chmod +x terminate_instance.py
+Check the list of instances and select the instance that you want to delete.
+
+$ ./list_instances.py
+i-00ee52ab19b3e77e7 {u'Code': 16, u'Name': 'running'}
+And now terminate it.
+
+$ ./terminate_instances.py i-00ee52ab19b3e77e7
+Now check the list of instance.
+
+$ ./list_instances.py i-00ee52ab19b3e77e7 {u'Code': 48, u'Name': 'terminated'}
+
+That’s it.
